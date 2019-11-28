@@ -25,7 +25,7 @@ func AddFlat(ctx *gin.Context) {
 
 // GetFlatsAll : Getting out all flats
 func GetFlatsAll(ctx *gin.Context) {
-	result, err := flats.GetAll()
+	result, err := flats.GetList()
 	if err != nil {
 		ctx.JSON(500, gin.H{"status": err.Error()})
 	}
@@ -74,4 +74,24 @@ func AddResident(ctx *gin.Context) {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"status": err.Error()})
 		}
 	}
+}
+
+func GetResidents(ctx *gin.Context) {
+	result, err := residents.GetList()
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": err.Error()})
+	}
+
+	ctx.JSON(200, result)
+}
+
+func GetResidentByID(ctx *gin.Context) {
+	id := ctx.Query("id")
+
+	result, err := residents.GetBy(id)
+	if err != nil {
+		ctx.JSON(500, gin.H{"status": err.Error()})
+	}
+
+	ctx.JSON(200, result)
 }

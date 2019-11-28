@@ -1,25 +1,22 @@
 package flats
 
 import (
-	"fmt"
-
 	"github.com/malikov0216/flatRental/database"
 	"github.com/malikov0216/flatRental/models"
 )
 
-func GetAll() ([]models.Flat, error) {
+func GetList() ([]models.Flat, error) {
 	const query = `select * from flats`
 
 	rows, err := database.DB.Query(query)
 	if err != nil {
-		fmt.Println("SHIT ", err.Error())
 		return nil, err
 	}
 
 	results := make([]models.Flat, 0)
 
 	for rows.Next() {
-		var flat models.Flat
+		flat := models.Flat{}
 		err = rows.Scan(&flat.ID, &flat.Name, &flat.Price, &flat.ResidentID, &flat.IsFree)
 		if err != nil {
 			return nil, err
@@ -31,22 +28,22 @@ func GetAll() ([]models.Flat, error) {
 }
 
 func GetBy(id string) (interface{}, error) {
-	var flat models.Flat
 	const query = `select * from flats f WHERE f.id = ($1)`
+	flat := models.Flat{}
 
-	rows, err := database.DB.Query(query, id)
+	row, err := database.DB.Query(query, id)
 	if err != nil {
 		return nil, err
 	}
 
-	for rows.Next() {
-		err = rows.Scan(&flat.ID, &flat.Name, &flat.Price, &flat.ResidentID, &flat.IsFree)
+	for row.Next() {
+		err = row.Scan(&flat.ID, &flat.Name, &flat.Price, &flat.ResidentID, &flat.IsFree)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return nil, nil
+	return flat, nil
 }
 
 func Add(flat models.Flat) error {
