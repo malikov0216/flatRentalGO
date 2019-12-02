@@ -33,6 +33,6 @@ type Payement struct {
 	AcceptedPerson string     `json:"acceptedPerson"`
 	Amount         int        `json:"amount"`
 	Electric       int        `json:"electric"`
-	ResidentID     int        `json:"residentID"`
+	ResidentID     int        `json:"residentID" binding:"required"`
 	Date           *time.Time `json:"date"`
 }

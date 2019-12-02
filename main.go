@@ -16,15 +16,22 @@ func main() {
 
 	route := gin.Default()
 
-	route.GET("/flats", h.GetFlatsAll)
-	route.GET("/flat", h.GetFlatByID)
-	route.PUT("/flat", h.EditFlat)
-	route.POST("/flat", h.AddFlat)
+	api := route.Group("/api")
+	{
+		api.GET("/flats", h.GetFlatsAll)
+		api.GET("/flat", h.GetFlatByID)
+		api.PUT("/flat", h.EditFlat)
+		api.POST("/flat", h.AddFlat)
 
-	route.GET("/residents", h.GetResidents)
-	route.GET("/resident", h.GetResidentByID)
-	route.POST("/resident", h.AddResident)
-	route.PUT("/resident", h.EditResident)
+		api.GET("/residents", h.GetResidents)
+		api.GET("/resident", h.GetResidentByID)
+		api.POST("/resident", h.AddResident)
+		api.PUT("/resident", h.EditResident)
+
+		api.POST("/payement", h.AddPayement)
+		api.GET("/payements", h.GetPayements)
+		api.GET("/payement", h.GetPayementByResidentID)
+	}
 
 	if err := route.Run(":8080"); err != nil {
 		panic(err)

@@ -1,10 +1,12 @@
 package handlers
 
 import (
-	"net/http"
+	"fmt"
+	"reflect"
 
 	"github.com/gin-gonic/gin"
 	"github.com/malikov0216/flatRental/methods/flats"
+	"github.com/malikov0216/flatRental/methods/payements"
 	"github.com/malikov0216/flatRental/methods/residents"
 	"github.com/malikov0216/flatRental/models"
 )
@@ -14,11 +16,11 @@ func AddFlat(ctx *gin.Context) {
 	flat := models.Flat{}
 	err := ctx.ShouldBindJSON(&flat)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(400, gin.H{"error": err.Error()})
 	} else {
 		err = flats.Add(flat)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"status": err.Error()})
+			ctx.JSON(500, gin.H{"status": err.Error()})
 		}
 	}
 }
@@ -31,33 +33,6 @@ func GetFlatsAll(ctx *gin.Context) {
 	}
 
 	ctx.JSON(200, result)
-}
-
-// EditFlat : Edit Flats resident ID
-func EditFlat(ctx *gin.Context) {
-	flatEdit := models.FlatEdit{}
-	err := ctx.ShouldBindJSON(&flatEdit)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	} else {
-		err = flats.EditBy(flatEdit)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		}
-	}
-}
-
-func EditResident(ctx *gin.Context) {
-	resident := models.Resident{}
-	err := ctx.ShouldBindJSON(&resident)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	} else {
-		err = residents.Edit(resident)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		}
-	}
 }
 
 /*
@@ -75,16 +50,30 @@ func GetFlatByID(ctx *gin.Context) {
 	ctx.JSON(200, result)
 }
 
+// EditFlat : Edit Flats resident ID
+func EditFlat(ctx *gin.Context) {
+	flatEdit := models.FlatEdit{}
+	err := ctx.ShouldBindJSON(&flatEdit)
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": err.Error()})
+	} else {
+		err = flats.EditBy(flatEdit)
+		if err != nil {
+			ctx.JSON(500, gin.H{"error": err.Error()})
+		}
+	}
+}
+
 // AddResident : Adding new resident to Database
 func AddResident(ctx *gin.Context) {
 	resident := models.Resident{}
 	err := ctx.ShouldBindJSON(&resident)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(400, gin.H{"error": err.Error()})
 	} else {
 		err = residents.Add(resident)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"status": err.Error()})
+			ctx.JSON(500, gin.H{"error": err.Error()})
 		}
 	}
 }
@@ -106,5 +95,50 @@ func GetResidentByID(ctx *gin.Context) {
 		ctx.JSON(500, gin.H{"status": err.Error()})
 	}
 
+	ctx.JSON(200, result)
+}
+
+func EditResident(ctx *gin.Context) {
+	resident := models.Resident{}
+	err := ctx.ShouldBindJSON(&resident)
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": err.Error()})
+	} else {
+		err = residents.Edit(resident)
+		if err != nil {
+			ctx.JSON(500, gin.H{"error": err.Error()})
+		}
+	}
+}
+
+func AddPayement(ctx *gin.Context) {
+	payement := models.Payement{}
+	err := ctx.ShouldBindJSON(&payement)
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": err.Error()})
+	} else {
+		err = payements.Add(payement)
+		if err != nil {
+			ctx.JSON(500, gin.H{"error": err.Error()})
+		}
+	}
+}
+
+func GetPayements(ctx *gin.Context) {
+	result, err := payements.GetList()
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": err.Error()})
+	}
+
+	ctx.JSON(200, result)
+}
+
+func GetPayementByResidentID(ctx *gin.Context) {
+	residentID := ctx.Query("residentID")
+	fmt.Println(reflect.TypeOf(residentID))
+	result, err := payements.GetByResidentId(residentID)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": err.Error()})
+	}
 	ctx.JSON(200, result)
 }
