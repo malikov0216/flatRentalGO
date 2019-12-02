@@ -43,7 +43,11 @@ func GetBy(id string) (interface{}, error) {
 		}
 	}
 
-	return flat, nil
+	if flat.ID == 0 {
+		return map[string]string{"error": "No flat with that id"}, nil
+	} else {
+		return flat, nil
+	}
 }
 
 func Add(flat models.Flat) error {
@@ -53,9 +57,13 @@ func Add(flat models.Flat) error {
 }
 
 func EditBy(flatEdit models.FlatEdit) error {
-	const query = `UPDATE flats SET resident_id = ($1), is_free = CASE WHEN resident_id IS NULL THEN true ELSE false END WHERE id = ($2)`
+	const query = `UPDATE flats SET resident_id = ($1) WHERE id = ($2)`
 	const caseQuery = `UPDATE flats SET is_free = CASE WHEN resident_id IS NULL THEN true ELSE false END WHERE id = ($1)`
 	_, err := database.DB.Exec(query, flatEdit.ResidentID, flatEdit.ID)
+	if err != nil {
+		return err
+	}
+
 	_, err = database.DB.Query(caseQuery, flatEdit.ID)
 	return err
 }

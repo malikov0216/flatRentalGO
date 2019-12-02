@@ -47,6 +47,19 @@ func EditFlat(ctx *gin.Context) {
 	}
 }
 
+func EditResident(ctx *gin.Context) {
+	resident := models.Resident{}
+	err := ctx.ShouldBindJSON(&resident)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	} else {
+		err = residents.Edit(resident)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+	}
+}
+
 /*
 GetFlatByID : Getting out a flat through passing id
 id : ID of flat
@@ -69,7 +82,7 @@ func AddResident(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	} else {
-		err = residents.AddResidentMethod(resident)
+		err = residents.Add(resident)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"status": err.Error()})
 		}

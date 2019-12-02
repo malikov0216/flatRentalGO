@@ -24,6 +24,7 @@ func main() {
 	route.GET("/residents", h.GetResidents)
 	route.GET("/resident", h.GetResidentByID)
 	route.POST("/resident", h.AddResident)
+	route.PUT("/resident", h.EditResident)
 
 	if err := route.Run(":8080"); err != nil {
 		panic(err)

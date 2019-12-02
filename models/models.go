@@ -11,6 +11,7 @@ type Flat struct {
 	IsFree     bool        `json:"isFree" binding:"required"`
 }
 
+// FlatEdit : Model of editing flat
 type FlatEdit struct {
 	ID         int         `json:"id" binding:"required"`
 	ResidentID interface{} `json:"residentID"`
@@ -22,5 +23,16 @@ type Resident struct {
 	Name     string     `json:"name" binding:"required"`
 	Contact  string     `json:"contact" binding:"required"`
 	CheckIn  *time.Time `json:"checkIn" binding:"required"`
-	CheckOut *time.Time `json:"checkOut" binding:"required"`
+	CheckOut *time.Time `json:"checkOut"`
+}
+
+// Payement : Model of Payement
+type Payement struct {
+	ID             int        `json:"id"`
+	Reason         string     `json:"reason"`
+	AcceptedPerson string     `json:"acceptedPerson"`
+	Amount         int        `json:"amount"`
+	Electric       int        `json:"electric"`
+	ResidentID     int        `json:"residentID"`
+	Date           *time.Time `json:"date"`
 }
