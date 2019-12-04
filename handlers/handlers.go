@@ -5,10 +5,10 @@ import (
 	"reflect"
 
 	"github.com/gin-gonic/gin"
-	"github.com/malikov0216/flatRental/methods/flats"
-	"github.com/malikov0216/flatRental/methods/payements"
-	"github.com/malikov0216/flatRental/methods/residents"
-	"github.com/malikov0216/flatRental/models"
+	"github.com/malikov0216/flatRentalGO/methods/flats"
+	"github.com/malikov0216/flatRentalGO/methods/payements"
+	"github.com/malikov0216/flatRentalGO/methods/residents"
+	"github.com/malikov0216/flatRentalGO/models"
 )
 
 // AddFlat : Adding new flat to Database

@@ -1,8 +1,8 @@
 package residents
 
 import (
-	"github.com/malikov0216/flatRental/database"
-	"github.com/malikov0216/flatRental/models"
+	"github.com/malikov0216/flatRentalGO/database"
+	"github.com/malikov0216/flatRentalGO/models"
 )
 
 func Add(resident models.Resident) error {

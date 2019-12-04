@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/malikov0216/flatRental/database"
+	"github.com/malikov0216/flatRentalGO/database"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-
 	_ "github.com/lib/pq"
-	h "github.com/malikov0216/flatRental/handlers"
+	h "github.com/malikov0216/flatRentalGO/handlers"
 )
 
 func main() {
@@ -17,6 +17,8 @@ func main() {
 	route := gin.Default()
 
 	api := route.Group("/api")
+	api.Use(cors.Default())
+
 	{
 		api.GET("/flats", h.GetFlatsAll)
 		api.GET("/flat", h.GetFlatByID)
