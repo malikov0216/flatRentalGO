@@ -14,12 +14,11 @@ func main() {
 	database.Open()
 	defer database.Close()
 
-	route := gin.Default()
+	router := gin.Default()
 
-	api := route.Group("/api")
-	api.Use(cors.Default())
-
+	api := router.Group("/api")
 	{
+		api.Use(cors.Default())
 		api.GET("/flats", h.GetFlatsAll)
 		api.GET("/flat", h.GetFlatByID)
 		api.PUT("/flat", h.EditFlat)
@@ -35,7 +34,7 @@ func main() {
 		api.GET("/payement", h.GetPayementByResidentID)
 	}
 
-	if err := route.Run(":8080"); err != nil {
+	if err := router.Run(":8080"); err != nil {
 		panic(err)
 	}
 }
