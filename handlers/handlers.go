@@ -3,7 +3,10 @@ package handlers
 import (
 	"fmt"
 	"reflect"
+	"time"
 
+	jwt_lib "github.com/dgrijalva/jwt-go"
+	// "github.com/gin-gonic/contrib/jwt"
 	"github.com/gin-gonic/gin"
 	"github.com/malikov0216/flatRentalGO/methods/flats"
 	"github.com/malikov0216/flatRentalGO/methods/payements"
@@ -141,4 +144,26 @@ func GetPayementByResidentID(ctx *gin.Context) {
 		ctx.JSON(500, gin.H{"error": err.Error()})
 	}
 	ctx.JSON(200, result)
+}
+
+var (
+	mySigningKey = "mySecretKey"
+)
+
+func GenerateToken(ctx *gin.Context) {
+
+	// Create the token
+	token := jwt_lib.New(jwt_lib.GetSigningMethod("HS256"))
+	// Set some claims
+	token.Claims = jwt_lib.MapClaims{
+		"email":   "mastaok02@gmail.com",
+		"telefon": "+77777739673",
+		"exp":     time.Now().Add(time.Hour * 1).Unix(),
+	}
+	// Sign and get the complete encoded token as a string
+	tokenString, err := token.SignedString([]byte(mySigningKey))
+	if err != nil {
+		ctx.JSON(500, gin.H{"message": "Could not generate token"})
+	}
+	ctx.JSON(200, gin.H{"token": tokenString})
 }
